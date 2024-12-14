@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import LoginPage from "./components/LoginPage";
+import SignUpPage from "./components/SignUpPage";
+import MainScreen from "./components/MainScreen";
+import Prediction from "./components/PredictionScreen";
+import ContactUs from "./components/ContactUs";
+import ProtectedRoute from "./ProtectedRoute";
+import { AuthProvider } from "./AuthContext";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    return (
+        <AuthProvider>
+            <Router>
+                <div className="app-container">
+                    <NavBar />
+                    <Routes>
+                        <Route path="/" element={<Navigate replace to="/signup" />} />  
+                        <Route path="/signup" element={<SignUpPage />} />  
+                        <Route path="/login" element={<LoginPage />} />  
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="/home" element={<MainScreen />} />
+                            <Route path="/prediction" element={<Prediction />} />
+                            <Route path="/contact" element={<ContactUs />} />
+                        </Route>
+                    </Routes>
+                    <Footer />
+                </div>
+            </Router>
+        </AuthProvider>
+    );
+};
 
 export default App;
